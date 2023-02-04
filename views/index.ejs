@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/CSS/gameplay.css">
+    <title>ShootShoot</title>
+</head>
+<body>
+    <!-- <div class="gameMenuFrame">
+        <div class="gameMenu">
+            <div class="gameId">ShOOtsHooT</div>
+            <div class="gameUserinput signinFrame">
+                <div class="userinputFrame">帳號 : <input type="text" class="userAccount"></div>
+                <div class="userinputFrame">密碼 : <input type="password" class="userPassword"></div>
+                <div class="signBtn"><button class="signIn">登入</button></div>
+                <div class="noaccount">沒有帳號 ? <span class="clickChangeSignup">點此註冊</span></div>
+            </div>
+            <div class="gameUserinput signupFrame" style="display: none;">
+                <div class="userinputFrame">暱稱 : <input type="text" class="userSignUpNick"></div>
+                <div class="userinputFrame">帳號 : <input type="text" class="userSignUpAccount"></div>
+                <div class="userinputFrame">密碼 : <input type="password" class="userSignUpPassword"></div>
+                <div class="signBtn"><button class="signUp">註冊</button></div>
+                <div class="noaccount">已有帳號 ? <span class="clickChangeSignin">點此登入</span></div>
+            </div>
+        </div>
+    </div> -->
+    <div class="window">
+        <div class="windowFrame">
+            <div class="to">
+                <div class="ownInterface">
+                    <div class="chatroomFrame">
+                        <div class="chat"><img src="/pic/chat3.png" width="32px"></div>
+                        <div class="chatroomInterface" style="display: none;">
+                            <div class="chatroom"><img src="/pic/close.png" width="28px"></div>
+                            <div style="display: flex;"><input type="text" class="chatroomInput"><img src="/pic/enter.png" width="28px"></div>
+                        </div>
+                    </div>
+                    <div class="dataInterface">
+                        <div class="ownName">hello</div>
+                        <div class="ownScoreFrameALL">
+                            <div class="ownScoreFrame">
+                                <div class="ownScorebar" style="width: 25px;"></div>
+                                <div class="ScoreFrame">score: <span class="ownScore">0</span></div>
+                            </div>
+                        </div>
+                        <div class="ownExeFrame">
+                            <div class="ownExebar"></div>
+                            <div class="ownLv"> Lvl <span></span> Tank </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <canvas class="main_game" id="canvas"></canvas>
+        </div>
+    </div>
+    <script src="/JS/gameplay.js"></script>
+    <script src="/JS/user.js"></script>
+    <script src="/JS/chatroom.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</body>
+</html>
