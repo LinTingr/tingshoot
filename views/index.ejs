@@ -7,33 +7,47 @@
     <title>ShootShoot</title>
 </head>
 <body>
-    <!-- <div class="gameMenuFrame">
-        <div class="gameMenu">
-            <div class="gameId">ShOOtsHooT</div>
-            <div class="gameUserinput signinFrame">
-                <div class="userinputFrame">帳號 : <input type="text" class="userAccount"></div>
-                <div class="userinputFrame">密碼 : <input type="password" class="userPassword"></div>
-                <div class="signBtn"><button class="signIn">登入</button></div>
-                <div class="noaccount">沒有帳號 ? <span class="clickChangeSignup">點此註冊</span></div>
-            </div>
-            <div class="gameUserinput signupFrame" style="display: none;">
-                <div class="userinputFrame">暱稱 : <input type="text" class="userSignUpNick"></div>
-                <div class="userinputFrame">帳號 : <input type="text" class="userSignUpAccount"></div>
-                <div class="userinputFrame">密碼 : <input type="password" class="userSignUpPassword"></div>
-                <div class="signBtn"><button class="signUp">註冊</button></div>
-                <div class="noaccount">已有帳號 ? <span class="clickChangeSignin">點此登入</span></div>
+    <div class="window">
+        <div class="gameMenuFrame">
+            <div class="gameMenu">
+                <div class="gameId">ShOOtsHooT</div>
+                <div class="gameUserinput signinFrame">
+                    <div class="userinputFrame">帳號 : <input type="text" class="userAccount"></div>
+                    <div class="userinputFrame">密碼 : <input type="password" class="userPassword"></div>
+                    <div class="signBtn"><button class="signIn">登入</button></div>
+                    <div class="noaccount">沒有帳號 ? <span class="clickChangeSignup">點此註冊</span></div>
+                </div>
+                <div class="gameUserinput signupFrame" style="display: none;">
+                    <div class="userinputFrame">暱稱 : <input type="text" class="userSignUpNick"></div>
+                    <div class="userinputFrame">帳號 : <input type="text" class="userSignUpAccount"></div>
+                    <div class="userinputFrame">密碼 : <input type="password" class="userSignUpPassword"></div>
+                    <div class="signBtn"><button class="signUp">註冊</button></div>
+                    <div class="noaccount">已有帳號 ? <span class="clickChangeSignin">點此登入</span></div>
+                </div>
             </div>
         </div>
-    </div> -->
-    <div class="window">
         <div class="windowFrame">
-            <div class="to">
+            <div class="gameUi">
+                <div class="gamestart">開始</div>
+                <div class="signout">登出</div>
+            </div>
+            <div class="to" style="display: none;">
                 <div class="ownInterface">
                     <div class="chatroomFrame">
                         <div class="chat"><img src="/pic/chat3.png" width="32px"></div>
                         <div class="chatroomInterface" style="display: none;">
-                            <div class="chatroom"><img src="/pic/close.png" width="28px"></div>
-                            <div style="display: flex;"><input type="text" class="chatroomInput"><img src="/pic/enter.png" width="28px"></div>
+                            <div class="chatroom">
+                                <img src="/pic/close.png" width="28px" class="close">
+                                <div class="chatroomContent">
+                                    <!-- <div><span>阿廷:</span><span>說你好</span></div>
+                                    <div><span>阿狗:</span><span>阿廷好</span></div>
+                                    <div><span>阿貓:</span><span>阿廷好</span></div>
+                                    <div><span>阿鼠:</span><span>阿廷好</span></div>
+                                    <div><span>阿咪:</span><span>阿廷好</span></div>
+                                    <div><span>阿汪:</span><span>阿廷好</span></div> -->
+                                </div>
+                            </div>
+                            <div style="display: flex;"><input type="text" class="chatroomInput"><img src="/pic/enter.png" width="28px" class="chatenter"></div>
                         </div>
                     </div>
                     <div class="dataInterface">
@@ -46,18 +60,19 @@
                         </div>
                         <div class="ownExeFrame">
                             <div class="ownExebar"></div>
-                            <div class="ownLv"> Lvl <span></span> Tank </div>
+                            <div class="ownLv"> Lv 1 <span></span> Tank </div>
                         </div>
-                    </div>
-                    
+                    </div>  
                 </div>
             </div>
-            <canvas class="main_game" id="canvas"></canvas>
+            <canvas class="main_game" id="canvas" ></canvas>
         </div>
     </div>
-    <script src="/JS/gameplay.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/JS/player.js"></script>
     <script src="/JS/user.js"></script>
     <script src="/JS/chatroom.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="/JS/gameplay.js"></script>
+    
 </body>
 </html>
