@@ -1,18 +1,31 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+}
 .window{
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
-    position: relative;
+    /* align-items: center;
+    position: relative; */
     z-index: 0;
 }
 .windowFrame{
     width: 1200px;
     height: 800px;
-    margin: auto;
-    /* background-color: mediumpurple; */
+    margin: 69px auto;
+    background-color: #cdcdcd;
 }
 .gameId{
-    font-size: 32px;
+    width: 300px;
+    height: 100px;
+    font-size: 50px;
+    color: crimson;
+    margin-bottom: 30px;
+    text-align: center;
+    margin: 200px auto 0;
 }
 
 .gameMenuFrame{
@@ -23,14 +36,15 @@
     justify-content: center;
     position: absolute;
     z-index: 1;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgb(0, 0, 0);
 }
 .gameMenu{
-    width: 500px;
-    height: 500px;
+    width: 1200px;
+    height: 800px;
     margin: auto;
+    background-color: #cdcdcd;
 }
-.gameId, .userinputFrame{
+.userinputFrame{
     width: 250px;
     height: 30px;
     text-align: center;
@@ -166,6 +180,7 @@
     justify-content: center;
     align-items: center;
     user-select: none;
+    cursor: pointer;
 }
 .chatroomInterface{
     border: #000 1px solid; 
@@ -179,4 +194,40 @@
 .chatroomInput{
     width: 290px;
     height: 20px;
+}
+.close, .chatenter{
+    user-select: none;
+    cursor: pointer;
+}
+.chatroomContent{
+    width: 320px;
+    height: 243px;
+    border: #000 1px solid;
+    user-select: none;
+
+}
+
+.gameUi{
+    position: absolute;
+    width: 1200px;
+    height: 800px;
+    
+    user-select: none;
+    background-color: #cdcdcd;
+}
+.gamestart, .signout{
+    width: 300px;
+    height: 150px;
+    background-color: #fff;
+    margin: 150px auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    cursor: pointer;
+    border-radius: 15px;
+    border: #000 1px solid;
+    user-select: none;
+
 }
