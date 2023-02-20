@@ -26,13 +26,16 @@ const messages = []
 let playinfo = {}
 let clients = []
 io.on('connection', (socket)=>{
-    // let clientId = socket.id;
-    // clients[clientId] = socket;
     console.log("a user connected", socket.id);
+    clients.push(socket.id);
     socket.on("playinit",(data)=>{
+        // console.log(playinfo)
         playinfo[socket.id] = data;
-        // io.emit("update", playinfo)
-        socket.broadcast.emit("update", playinfo) //傳資料到前端
+        if(playinfo[socket.id].hp < 0){
+            delete playinfo[socket.id]
+        }
+        io.emit("update", playinfo)
+        // socket.broadcast.emit("update", playinfo) //傳資料到前端
     })
     socket.on("bullets", (bullets)=>{
         // console.log(bullets)
@@ -53,31 +56,33 @@ io.on('connection', (socket)=>{
     socket.on('disconnect', ()=>{
         console.log('A user disconnected:', socket.id);
         delete playinfo[socket.id];
-        io.emit('disconnected', socket.id);
+        io.emit('disid', socket.id);
+        // console.log(playinfo)
     })
 
-    
+    // let scoreballs = []
 
-})
-let scoreballs = []
-function scoreball(){
-    setInterval(()=>{
-        if (scoreballs.length < 5) {
-            const ballX = Math.floor(Math.random() * (1200 - 20 + 1) + 20);
-            const ballY = Math.floor(Math.random() * (800 - 20 + 1) + 20);
-            scoreballs.push([ballX, ballY])
-        }
-    }, 3000)
-    io.emit("scoreball", scoreballs)
-    if(scoreballs.length == 5){
-        scoreballs = []
-    }
-    // socket.on("ballclear", (allball)=>{
+    // function scoreball() {
+    //     if (scoreballs.length < 5) {
+    //         const ballX = Math.floor(Math.random() * (1200 - 20 + 1) + 20);
+    //         const ballY = Math.floor(Math.random() * (800 - 20 + 1) + 20);
+    //         scoreballs.push([ballX, ballY])
+    //     } else {
+    //         io.emit("scoreball", scoreballs)
+    //         scoreballs = []
+    //     }
+    // }
+    // socket.on("ballclear", (allball) => {
     //     scoreballs = allball
     // })
-}
+    // setInterval(scoreball, 5000);
 
-// setInterval(scoreball, 3000);
+})
+
+
+
+
+
 
 httpServer.listen(5000, function(){
     console.log("http://127.0.0.1:5000");
