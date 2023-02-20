@@ -3,7 +3,7 @@ const chatroomInterface = document.querySelector(".chatroomInterface");
 const closeX = document.querySelector(".close");
 const chatroomContent = document.querySelector(".chatroomContent")
 const chatroomInput = document.querySelector(".chatroomInput")
-
+const chatpic = document.querySelector(".chatpic")
 chat.addEventListener("click", ()=>{
     chatroomInterface.style.display = "";
     chat.style.display = "none";
@@ -20,9 +20,10 @@ addEventListener("keyup", (event)=>{
 closeX.addEventListener("click", ()=>{
     chatroomInterface.style.display = "none";
     chat.style.display = "";
+    chatpic.style.display=""
 })
 
-const local = "http://127.0.0.1:5000/";
+const local = "http://127.0.0.1:5000";
 const socket = io(local);
 let username ="";
 
@@ -34,6 +35,7 @@ chatroomInput.addEventListener("keyup", function(event) {
                 message: chatroomInput.value
             })
         }
+        //清空輸入欄
         chatroomInput.value =""
     }
   });
@@ -41,7 +43,9 @@ chatroomInput.addEventListener("keyup", function(event) {
 
 socket.on("allMessage", function(message){
     if(message.name){
-        chatroomContent.innerHTML += "<div><span>"+message.name+":</span><span>"+message.message+"</span></div>"
+        chatroomContent.innerHTML += "<div><span>"+message.name+" : </span><span>"+message.message+"</span></div>"
+        //滾動條到最底
+        chatroomContent.scrollTop = chatroomContent.scrollHeight
         console.log("message", message)
     }
 
