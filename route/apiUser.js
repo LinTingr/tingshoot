@@ -96,24 +96,24 @@ route.put("/", async(req, res)=>{
     }
     
 })
-// route.get("/", (req, res)=>{
-//     const cookie = req.headers.cookie.replace("token=", "")
-//     if(cookie){
-//         jwt.verify(cookie, secret, (err, decoded) => {
-//             if (err) {
-//                 console.error(err);
-//             } else {
-//                 console.log(decoded);
-//                 data = {
-//                     "ok":true,
-//                     "username":decoded.username,
-//                     "message":"歡迎回來 ! "
-//                 }
-//                 res.status(200).json(data)
-//             }
-//         });
+route.get("/", (req, res)=>{
+    const cookie = req.headers.cookie.replace("token=", "")
+    if(cookie){
+        jwt.verify(cookie, secret, (err, decoded) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log(decoded);
+                data = {
+                    "ok":true,
+                    "user":decoded,
+                    "message":"歡迎回來 ! "
+                }
+                res.status(200).json(data)
+            }
+        });
 
-//     }
-// })
+    }
+})
 
 module.exports = route
