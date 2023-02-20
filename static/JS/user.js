@@ -1,3 +1,6 @@
+
+
+
 /////////////////////////////////////////////////////////////////////////////////
 // 註冊
 const signUp = document.querySelector(".signUp")
@@ -44,7 +47,7 @@ const userAccount = document.querySelector(".userAccount")
 const userPassword = document.querySelector(".userPassword")
 const signIn = document.querySelector(".signIn")
 const gameMenuFrame = document.querySelector(".gameMenuFrame")
-
+const ownName = document.querySelector(".ownName")
 const gameUi = document.querySelector(".gameUi");
 const gamestart = document.querySelector(".gamestart");
 const to = document.querySelector(".to");
@@ -73,16 +76,48 @@ signIn.addEventListener("click", ()=>{
     })
 })
 /////////////////////////////////////////////////////////////////////////////////
-let figure
+fetch("/api/user").then((response)=>{
+    return response.json()
+}).then((data)=>{
+    if(data.ok){
+        console.log(data)
+        gameMenuFrame.style.display = "none"
+        user = data.user
+    }
+})
+/////////////////////////////////////////////////////////////////////////////////
+
+let figure;
+let hp = 120;
+let radius = 25;
+let damage = 15;
+let angle = 0;
+let speed = 2.5;
+let score = 0;
+let exist = false;
 
 gamestart.addEventListener("click", ()=>{
     gameUi.style.display = "none" ;
     to.style.display = "" ;
-
-    figure = new Figure(user.username, canvas.width/2, canvas.height/2, 25, "mediumpurple", 2.5, 0)
+    ownName.textContent = user.username
+    exist = true;
+    figure = new Figure(user.username, 
+        canvas.width/2, 
+        canvas.height/2, 
+        radius, 
+        "mediumpurple", 
+        speed, 
+        angle, 
+        hp, 
+        damage,
+        score,
+        exist
+    )
+  
     startgame()
-    projectile()
     // scoreObject()
-
+        
 })
+
+
 /////////////////////////////////////////////////////////////////////////////////
