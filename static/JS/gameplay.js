@@ -55,8 +55,7 @@ canvas.style.background = "#cdcdcd";
 let players = {}
 let bullets = []
 let scoreTriangle =[]
-let scoreballs = [] 
-let score = 0 
+let scoreballs = []  
 
 
 socket.on("scoreball",(x)=>{
@@ -67,24 +66,20 @@ socket.on("scoreball",(x)=>{
         }
     }
 })
-// function scoreObject(X){
-//     setInterval(()=>{
-//         if (scoreballs.length < 5) {
-//             const ballX = Math.floor(Math.random() * (1200 - 20 + 1) + 20);
-//             const ballY = Math.floor(Math.random() * (800 - 20 + 1) + 20);
-//             // scoreTrangle.push(new ScoreTrangle())    
-//             scoreballs.push(new ScoreBall(ballX, ballY, 20, "#ffe869"))
-//         }
-//         // if(scoreTriangle.length < 1){
-//         //     const triangleX = Math.floor(Math.random() * (1200 - 20 + 1) + 20);
-//         //     const triangleY = Math.floor(Math.random() * (800 - 20 + 1) + 20);
-//         //     scoreTriangle.push(new ScoreTriangle(triangleX, triangleY, 100, "#fc7677"))
-//         // }
-//     },1000) 
-// }
+
+
+let lastShotTime = 0;
 
 function projectile(){
     addEventListener("click", (event)=>{ 
+        let currentTime = Date.now();
+        // console.log(currentTime)
+        let timeDiff = currentTime - lastShotTime;
+
+        if (timeDiff < 350) {
+            return;
+        }
+
         let rect = canvas.getBoundingClientRect();
         let xx = event.clientX - rect.left;
         let yy = event.clientY - rect.top;
@@ -94,10 +89,11 @@ function projectile(){
             figure.ypos+50*Math.sin(angle), 
             10, 
             angle, 
-            {x:Math.cos(angle)*6,y:Math.sin(angle)*6});
+            {x:Math.cos(angle)*3,y:Math.sin(angle)*3});
+
         socket.emit("bullets", bullet)
         bullets.push(bullet);
-        console.log(bullets)
+        lastShotTime = currentTime;
     }) 
 }
 
@@ -130,31 +126,81 @@ function mousemove(){
     });
 }
 
-let abc 
-socket.on("update", (playinfo)=>{
-    context.clearRect(0, 0, canvas.width, canvas.height);       
-    for(let id in playinfo){
-            if(id !== socket.id){
-                players[id] = new Figure(playinfo[id].name, playinfo[id].x, playinfo[id].y, 25, "mediumpurple", 2.5, playinfo[id].angle)
-                abc = players[id]
-            }
-        }
-})
+function addplayer(){
+    for(let i in players){
+        console.log(players[i])
+        let player = players[i]
+        player.draw()
+    }
+}
+
 socket.on("bullet", (otherbullets)=>{
     let bullet = new Bullet(otherbullets.x, otherbullets.y, otherbullets.radius, otherbullets.angle, otherbullets.speed)
     bullets.push(bullet)
 })
+
+let playerexist = {} 
+let disid 
+socket.on("disid", disId=>{
+    disid = disId
+    console.log(disid)
+})
+
+
+socket.on("update", (playinfo)=>{  
+    if (disid in players) {
+        console.log(disid)
+        delete players[disid]
+        console.log("移除成功")
+    }  
+    for (let id in playinfo) {
+        if (id === socket.id) {
+            continue;  // 跳過自己的資訊
+        }
+        if (!playinfo[id].exist) {
+            if (id in players) {
+                delete players[id];
+                console.log("移除成功")
+            }
+            continue;  // 玩家不存在，跳過該資訊
+        }
+        if (id in players) {
+            const player = players[id];
+            if (player.hp > 0) {
+                player.xpos = playinfo[id].x;
+                player.ypos = playinfo[id].y;
+                player.radius = playinfo[id].radius;
+                player.speed = playinfo[id].speed;
+                player.damage = playinfo[id].damage;
+                player.score = playinfo[id].score;
+                player.hp = playinfo[id].hp;
+                player.angle = playinfo[id].angle;
+            } else {
+                delete players[id];
+                console.log("移除成功")
+            }
+        } else {
+            console.log("建立玩家", id);
+            players[id] = new Figure(
+                playinfo[id].name, 
+                playinfo[id].x, 
+                playinfo[id].y, 
+                playinfo[id].radius, 
+                playinfo[id].color, 
+                playinfo[id].speed, 
+                playinfo[id].angle, 
+                playinfo[id].hp, 
+                playinfo[id].damage,
+                playinfo[id].score,
+                playinfo[id].exist
+            );
+        }
+    }
+})
 function startgame(){
+//////////////////////////////////////////////////////////////////////////////////////
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-//////////////////////////////////////////////////////////////////////////////////////
-    bullets.forEach(function(bullet){
-        bullet.update();
-    })
-    // otherbullets.forEach(function(bullet){
-    //     console.log("otherbullets", otherbullets)
-    //     bullet.update();
-    // })
     scoreTriangle.forEach(function(triangle, triangleindex){
         triangle.update();
         const distToTriangleCenter = Math.hypot(figure.xpos - triangle.x, figure.ypos - triangle.y);
@@ -192,7 +238,7 @@ function startgame(){
     scoreballs.forEach(function(ball, ballindex){
         ball.update();
         const dist = Math.hypot(figure.xpos - ball.x, figure.ypos - ball.y)
-        if(dist- ball.radius - figure.radius < 1){
+        if(dist - ball.radius - figure.radius < 1){
             console.log("碰撞")
         }
         bullets.forEach(function(bullet, bulletindex){
@@ -201,8 +247,9 @@ function startgame(){
                 bullets.splice(bulletindex, 1)
                 scoreballs.splice(ballindex, 1)
                 //分數
-                score += 10
-                ownScore.innerText = score
+                figure.score += 10
+                console.log(figure.score)
+                ownScore.innerText = figure.score
                 // 分數條
                 let scorebar = parseInt(ownScorebar.style.width)
                 scorebar += 10/10
@@ -216,32 +263,78 @@ function startgame(){
             }
         })
     })
-
+    
     figure.draw()
     // 傳資料到伺服端
     socket.emit("playinit", {
-        name:user.username,
-        x: figure.xpos,
-        y: figure.ypos, 
-        radius:25, 
-        color:"black", 
-        speed:2.5, 
-        angle:figure.angle
+        name : user.username,
+        x : figure.xpos,
+        y : figure.ypos, 
+        radius : figure.radius, 
+        color :"black", 
+        speed : figure.speed, 
+        angle : figure.angle,
+        hp : figure.hp,
+        damage : figure.damage,
+        score : figure.score,
+        exist : figure.exist
     }) 
     
 
-    // 資料傳到客戶端
-    if(typeof(abc)=="object"){
-        abc.draw()
+    for(let id in players){
+        let player = players[id]
+        player.draw()
+        bullets.forEach(function(bullet, bulletindex){
+            const dist = Math.hypot(player.xpos - bullet.x, player.ypos - bullet.y)
+            if (dist - bullet.radius - player.radius < 1) {
+                console.log("2, 碰撞")
+                player.hp = player.hp - player.damage;
+                bullets.splice(bulletindex, 1);
+                bulletindex--;
+            }
+            if(player.hp <= 0){
+                console.log("擊殺玩家")
+                figure.score += 1000;
+                ownScore.innerText = figure.score
+                // 分數條
+                let scorebar = parseInt(ownScorebar.style.width)
+                scorebar += 1000/10
+                if (scorebar >= 297){
+                    scorebar = 297
+                }
+                ownScorebar.style.width = scorebar+"px"
+            }
+        })
     }
 
-    palyermove();
-    mousemove();
+    bullets.forEach(function(bullet, bulletindex){
+        // console.log(bullets)
+        bullet.update();
+        // 子彈跑出畫面就刪除子彈
+        if(bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height){
+            bullets.splice(bulletindex,1);
+            bulletindex--;
+        }
+        const dist = Math.hypot(figure.xpos - bullet.x, figure.ypos - bullet.y)
+        if (dist - bullet.radius - figure.radius < 1) {
+            console.log("1,碰撞")
+            figure.hp = figure.hp - figure.damage;
+            bullets.splice(bulletindex, 1);
+            bulletindex--;
+        }
+    })
+
+
+    if(figure.hp <= 0){
+        figure.exist = false
+        socket.emit("playerDied", "playerDied:"+figure.name)
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        gameover()
+    }else{
+        palyermove();
+        mousemove();
+        projectile();
+    }
+
     requestAnimationFrame(startgame);
 }
-
-// socket.on("bullet", (bullet)=>{
-//     console.log(bullet)
-//     // let bbbb = new Bullet(abc.xpos+50*Math.cos(abc.angle), abc.ypos+50*Math.sin(abc.angle), 10, abc.angle, {x:Math.cos(abc.angle)*6,y:Math.sin(abc.angle)*6});
-//     bullets.push(bullet);
-// })
